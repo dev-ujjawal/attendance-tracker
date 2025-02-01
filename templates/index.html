@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Tracking System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px 0px gray;
+        }
+        input, select, button {
+            margin: 10px;
+            padding: 10px;
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Attendance Tracking System</h2>
+
+        <h3>Mark Attendance</h3>
+        <input type="text" id="name" placeholder="Enter Name">
+        <select id="status">
+            <option value="Present">Present</option>
+            <option value="Absent">Absent</option>
+            <option value="Late">Late</option>
+        </select>
+        <button onclick="markAttendance()">Mark Attendance</button>
+
+        <h3>Generate Report</h3>
+        <input type="text" id="report_name" placeholder="Enter Name for Report">
+        <button onclick="generateReport()">View Report</button>
+
+        <h3>Other Options</h3>
+        <button onclick="window.location.href='/view_students'">View Students</button>
+        <button onclick="window.location.href='/download_excel'">Download Excel</button>
+    </div>
+
+    <script>
+        function markAttendance() {
+            let name = document.getElementById("name").value;
+            let status = document.getElementById("status").value;
+
+            fetch('/mark_attendance', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name, status: status })
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error("Error:", error));
+        }
+
+        function generateReport() {
+            let name = document.getElementById("report_name").value;
+            window.location.href = "/get_report/" + name;
+        }
+    </script>
+
+</body>
+</html>
